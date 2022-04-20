@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt;
 
 use crate::piece::{Piece, Pawn, Color};
 
@@ -58,8 +59,8 @@ impl Board {
         return (*ranks.get(rank).unwrap(), *files.get(file).unwrap());
     }
 
-    fn new(&self) {
-
+    fn new() {
+    
     }
 
     fn from_fen(&self, fen: String) {
@@ -87,5 +88,28 @@ impl Board {
  *            println!("");
  *        }
  */
+    }
+}
+
+fn get_piece_id(piece: &Piece) -> char {
+    match piece {
+        Piece::Pawn => 'P',
+        Piece::Rook => 'R',
+        Piece::Blank => '_',
+    }
+}
+
+
+impl fmt::Display for Board {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut display_string = String::new();
+        for rank in &self.board {
+            for square in rank {
+                display_string.push(get_piece_id(&square.piece));
+                display_string.push(' ');
+            }
+            display_string.push('\n');
+        } 
+        write!(f, "{}", display_string)
     }
 }
