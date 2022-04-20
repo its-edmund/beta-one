@@ -2,6 +2,12 @@ use crate::board::Board;
 
 type Coordinate = (u8, u8);
 
+pub enum Piece {
+    Pawn,
+    Rook,
+    Blank
+}
+
 struct Player {
     color: Color
 }
@@ -9,12 +15,6 @@ struct Player {
 pub enum Color {
     BLACK,
     WHITE
-}
-
-pub trait Piece {
-    fn possible_moves(&self, board: Board) -> Vec<Coordinate>;
-
-    fn get_piece_id(&self) -> char;
 }
 
 /*
@@ -37,17 +37,35 @@ pub struct Pawn {
 
 pub struct Rook;
 
-impl Piece for Pawn {
+pub struct Blank;
+
+fn get_piece_id(piece: Piece) -> char {
+    match piece {
+        Piece::Pawn => 'P',
+        Piece::Rook => 'R',
+        Piece::Blank => '_',
+    }
+}
+
+impl Blank {
+    fn possible_moves(&self, board: Board) {
+
+    }
+}
+
+impl Pawn {
     fn possible_moves(&self, board: Board) -> Vec<Coordinate> {
         let mut moves: Vec<Coordinate> = Vec::new();
         if !self.has_moved {
             moves.push((self.location.0 - 1, self.location.1));
             moves.push((self.location.0 - 2, self.location.1));
-            if board.board[self.location.0 - 1][self.location.1] != '0' {
+            /* if board.board[self.location.0 - 1][self.location.1] != '_' {
                 moves.push((self.location.0 - 1, self.location.1))
-            }
+            } */
         } else {
-            moves.push((self.piece.location.0 - 1, self.piece.location.1));
+            /*
+             *moves.push((self.piece.location.0 - 1, self.piece.location.1));
+             */
         }
         moves
     }
@@ -58,13 +76,9 @@ impl Piece for Pawn {
 }
 
 
-impl Piece for Rook { 
+impl Rook { 
     fn possible_moves(&self, board: Board) -> Vec<Coordinate> {
         let mut moves: Vec<Coordinate> = Vec::new();
         moves
-    }
-    
-    fn get_piece_id(&self) {
-        self.piece_id;
     }
 }

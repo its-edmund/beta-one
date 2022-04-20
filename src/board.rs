@@ -2,30 +2,32 @@ use std::collections::HashMap;
 
 use crate::piece::{Piece, Pawn, Color};
 
-struct Square<T: Piece> {
-    rank: char,
-    file: char,
-    piece: Box<T>,
+pub struct Square {
+    pub rank: char,
+    pub file: char,
+    pub piece: Piece,
 }
 
-pub struct Board<T> {
-    board: Vec<Vec<Square<T>>>
+pub struct Board {
+    pub board: Vec<Vec<Square>>
 }
 
-impl<T> Board<T> {
+impl Board {
     fn show_state(&self) {
         for i in 0..8 {
             for j in 0..8{
-                let square = self.board[i][i];
-                let piece = *square.piece;
-                print!("{} ", square.piece.piece_id);
+                //let square = self.board[i][i];
+                /*
+                 *let piece = square.piece.get_piece_id();
+                 *print!("{} ", square.piece);
+                 */
             }
             println!("");
         }
     }
     
-    fn get_possible_moves(&self, piece: T) {
-        piece.possible_moves(self.board);
+    fn get_possible_moves(&self, piece: Piece) {
+        //piece.possible_moves(self.board);
     }
 
     fn move_piece(&self, row: usize, col: usize) {
@@ -56,24 +58,34 @@ impl<T> Board<T> {
         return (*ranks.get(rank).unwrap(), *files.get(file).unwrap());
     }
 
-    fn initialize_board(&self) {
-        for i in 0..8 {
-            for j in 0..8 {
-                if i == 1 {
+    fn new(&self) {
 
-                    self.board[i][j] = Square { rank: '1', file: 'a', piece: Box::new(Pawn {
-                            has_moved: false,
-                            location: (i as u8, j as u8),
-                            killed: false,
-                            color: Color::BLACK,
-                            piece_id: 'P',
-                        }),
-                    }
-                }
-                let square = &self.board[i][i];
-                print!("{} ", square.piece.piece_id);
-            }
-            println!("");
-        }
+    }
+
+    fn from_fen(&self, fen: String) {
+
+    }
+
+    fn initialize_board(&self) {
+/*
+ *        for i in 0..8 {
+ *            for j in 0..8 {
+ *                if i == 1 {
+ *
+ *                    self.board[i][j] = Square { rank: '1', file: 'a', piece: Box::new(Pawn {
+ *                            has_moved: false,
+ *                            location: (i as u8, j as u8),
+ *                            killed: false,
+ *                            color: Color::BLACK,
+ *                            piece_id: 'P',
+ *                        }),
+ *                    }
+ *                }
+ *                let square = &self.board[i][i];
+ *                print!("{} ", square.piece.piece_id);
+ *            }
+ *            println!("");
+ *        }
+ */
     }
 }
