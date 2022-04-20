@@ -3,15 +3,18 @@ use std::fmt;
 
 use crate::piece::{Piece, Pawn, Color};
 
+#[derive(Debug)]
 pub struct Square {
     pub rank: char,
     pub file: char,
     pub piece: Piece,
 }
 
+#[derive(Debug)]
 pub struct Board {
     pub board: Vec<Vec<Square>>
 }
+
 
 impl Board {
     fn show_state(&self) {
@@ -63,8 +66,38 @@ impl Board {
     
     }
 
-    fn from_fen(&self, fen: String) {
+    pub fn from_fen(fen: String) -> Board {
+        let fen_split: Vec<&str> = fen.split(" ").collect();
+            
+        let board_layout = fen_split[0].split("/");
 
+        let mut board: Vec<Vec<Square>> = Vec::with_capacity(8 * 8);
+
+        let get_new_piece = |piece: char| {
+            match piece {
+                'P' => Piece::Pawn,
+                'B' => Piece::Bishop,
+                'Q' => Piece::Queen,
+                'K' => Piece::King,
+                'N' => Piece::Knight,
+                'R' => Piece::Rook,
+                _   => Piece::Blank
+            }
+        };
+
+        for (i, row) in board_layout.enumerate() {
+            board.push(Vec::new());
+            for (j, piece) in row.chars().enumerate() {
+                board[i].push(Square {
+                    rank: '1',
+                    file: 'a',
+                    piece: get_new_piece(piece)
+                });
+            }
+        }
+
+
+        Self { board }
     }
 
     fn initialize_board(&self) {
@@ -95,6 +128,10 @@ fn get_piece_id(piece: &Piece) -> char {
     match piece {
         Piece::Pawn => 'P',
         Piece::Rook => 'R',
+        Piece::Knight => 'N',
+        Piece::Queen => 'Q',
+        Piece::King => 'K',
+        Piece::Bishop => 'B',
         Piece::Blank => '_',
     }
 }

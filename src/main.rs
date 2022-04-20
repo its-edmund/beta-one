@@ -19,5 +19,7 @@ fn main() {
         }
     }
 
-    let board = Board { board: board_layout };
+    let board = Board::from_fen(String::from("RNBQKBNR/PPPPPPPP/********/********/********/********/PPPPPPPP/RNBQKBNR"));
+    print!("{}", board);
+    print!("done");
 }

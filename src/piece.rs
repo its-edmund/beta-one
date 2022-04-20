@@ -2,9 +2,14 @@ use crate::board::Board;
 
 type Coordinate = (u8, u8);
 
+#[derive(Debug)]
 pub enum Piece {
+    King,
+    Queen,
+    Bishop,
     Pawn,
     Rook,
+    Knight,
     Blank
 }
 
@@ -43,9 +48,26 @@ fn get_piece_id(piece: Piece) -> char {
     match piece {
         Piece::Pawn => 'P',
         Piece::Rook => 'R',
+        Piece::Knight => 'N',
+        Piece::Queen => 'Q',
+        Piece::King => 'K',
+        Piece::Bishop => 'B',
         Piece::Blank => '_',
     }
 }
+
+/*
+ *fn get_legal_moves(piece: Piece, board: Board) -> Vec<Coordinate> {
+ *    match piece {
+ *        Piece::Pawn => pawn_legal_moves(),
+ *        _ => pawn_legal_moves(board)
+ *    }
+ *}
+ *
+ *fn pawn_legal_moves(board: Board, file: char, rank: char) -> Vec<Coordinate> {
+ *
+ *}
+ */
 
 impl Blank {
     fn possible_moves(&self, board: Board) {
