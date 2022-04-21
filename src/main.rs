@@ -8,7 +8,7 @@ pub mod piece;
 pub mod board;
 
 fn main() {
-    let mut board = Board::from_fen(String::from("RNBQKBNR/PPPPPPPP/********/********/********/********/PPPPPPPP/RNBQKBNR"));
+    let mut board = Board::from_fen(String::from("rnbqkbnr/pppppppp/********/********/********/********/PPPPPPPP/RNBQKBNR"));
     print!("{}", board);
 
     let mut move_input = String::new();

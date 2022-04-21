@@ -4,12 +4,12 @@ type Coordinate = (u8, u8);
 
 #[derive(Debug)]
 pub enum Piece {
-    King,
-    Queen,
-    Bishop,
-    Pawn,
-    Rook,
-    Knight,
+    King { color: Color },
+    Queen { color: Color },
+    Bishop { color: Color },
+    Pawn { color: Color },
+    Rook { color: Color },
+    Knight { color: Color },
     Blank
 }
 
@@ -17,6 +17,7 @@ struct Player {
     color: Color
 }
 
+#[derive(Debug)]
 pub enum Color {
     BLACK,
     WHITE
@@ -43,19 +44,6 @@ pub struct Pawn {
 pub struct Rook;
 
 pub struct Blank;
-
-fn get_piece_id(piece: Piece) -> char {
-    match piece {
-        Piece::Pawn => 'P',
-        Piece::Rook => 'R',
-        Piece::Knight => 'N',
-        Piece::Queen => 'Q',
-        Piece::King => 'K',
-        Piece::Bishop => 'B',
-        Piece::Blank => '_',
-    }
-}
-
 
 /*
  *fn get_legal_moves(piece: Piece, board: Board, file: char, rank: char) -> Vec<Coordinate> {

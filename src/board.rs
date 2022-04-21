@@ -78,12 +78,18 @@ impl Board {
 
         let get_new_piece = |piece: char| {
             match piece {
-                'P' => Piece::Pawn,
-                'B' => Piece::Bishop,
-                'Q' => Piece::Queen,
-                'K' => Piece::King,
-                'N' => Piece::Knight,
-                'R' => Piece::Rook,
+                'P' => Piece::Pawn { color: Color::WHITE },
+                'p' => Piece::Pawn { color: Color::BLACK },
+                'B' => Piece::Bishop { color: Color::WHITE },
+                'b' => Piece::Bishop { color: Color::BLACK },
+                'Q' => Piece::Queen { color: Color::WHITE },
+                'q' => Piece::Queen { color: Color::BLACK },
+                'K' => Piece::King { color: Color::WHITE },
+                'k' => Piece::King { color: Color::BLACK },
+                'N' => Piece::Knight { color: Color::WHITE },
+                'n' => Piece::Knight { color: Color::BLACK },
+                'R' => Piece::Rook { color: Color::WHITE },
+                'r' => Piece::Rook { color: Color::BLACK },
                 _   => Piece::Blank
             }
         };
@@ -129,12 +135,18 @@ impl Board {
 
 fn get_piece_id(piece: &Piece) -> char {
     match piece {
-        Piece::Pawn => 'P',
-        Piece::Rook => 'R',
-        Piece::Knight => 'N',
-        Piece::Queen => 'Q',
-        Piece::King => 'K',
-        Piece::Bishop => 'B',
+        Piece::Pawn { color: Color::WHITE } => 'P',
+        Piece::Pawn { color: Color::BLACK } => 'p',
+        Piece::Rook { color: Color::WHITE } => 'R',
+        Piece::Rook { color: Color::BLACK } => 'r',
+        Piece::Knight { color: Color::WHITE } => 'N',
+        Piece::Knight { color: Color::BLACK } => 'n',
+        Piece::Queen { color: Color::WHITE } => 'Q',
+        Piece::Queen { color: Color::BLACK } => 'q',
+        Piece::King { color: Color::WHITE } => 'K',
+        Piece::King { color: Color::BLACK } => 'k',
+        Piece::Bishop { color: Color::WHITE } => 'B',
+        Piece::Bishop { color: Color::BLACK } => 'b',
         Piece::Blank => '_',
     }
 }
