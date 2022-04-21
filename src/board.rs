@@ -1,12 +1,13 @@
 use std::collections::HashMap;
 use std::fmt;
+use regex::Regex;
 
-use crate::piece::{Piece, Pawn, Color};
+use crate::piece::{Piece, Pawn, Color, Blank};
 
 #[derive(Debug)]
 pub struct Square {
-    pub rank: char,
     pub file: char,
+    pub rank: char,
     pub piece: Piece,
 }
 
@@ -17,29 +18,35 @@ pub struct Board {
 
 
 impl Board {
-    fn show_state(&self) {
-        for i in 0..8 {
-            for j in 0..8{
-                //let square = self.board[i][i];
-                /*
-                 *let piece = square.piece.get_piece_id();
-                 *print!("{} ", square.piece);
-                 */
-            }
-            println!("");
-        }
-    }
-    
     fn get_possible_moves(&self, piece: Piece) {
         //piece.possible_moves(self.board);
     }
 
-    fn move_piece(&self, row: usize, col: usize) {
-        let piece = &self.board[col][row];
+    pub fn parse_move(&self, move_string: &str) -> Result<((char, char), (char, char)), &str> {
+        let re = Regex::new("[a-h][1-8] [a-h][1-8]").unwrap();
+        match re.is_match(move_string) {
+            true => {
+                let coordinates: Vec<&str> = move_string.trim().split(" ").collect();
+                let src_coordinates: Vec<char> = coordinates[0].chars().collect();
+                let dest_coordinates: Vec<char> = coordinates[1].chars().collect();
+                Ok(((src_coordinates[0], src_coordinates[1]), (dest_coordinates[0], dest_coordinates[1])))
+            },
+            false => Err("Incorrect input!"),
+        }
     }
 
-    fn convert_coordinate(&self, rank: &char, file: &char) -> (u8, u8) {
-        let files: HashMap<char, u8> = HashMap::from([
+    pub fn move_piece(&mut self, src: (char, char), dest: (char, char)) {
+        let src_coord = &self.convert_coordinate(src.0, src.1);
+        let dest_coord = &self.convert_coordinate(dest.0, dest.1);
+        let piece = &self.board[src_coord.0][src_coord.1].piece;
+        let mut old = std::mem::replace(&mut self.board[src_coord.0][src_coord.1], Square { file: src.0, rank: src.1, piece: Piece::Blank });
+        old.file = dest.0;
+        old.rank = dest.1;
+        let new = std::mem::replace(&mut self.board[dest_coord.0][dest_coord.1], old);
+    }
+
+    fn convert_coordinate(&self, file: char, rank: char) -> (usize, usize) {
+        let files: HashMap<char, usize> = HashMap::from([
             ('a', 0),
             ('b', 1),
             ('c', 2),
@@ -49,7 +56,7 @@ impl Board {
             ('g', 6),
             ('h', 7),
         ]);
-        let ranks: HashMap<char, u8> = HashMap::from([
+        let ranks: HashMap<char, usize> = HashMap::from([
             ('8', 0),
             ('7', 1),
             ('6', 2),
@@ -59,11 +66,7 @@ impl Board {
             ('2', 6),
             ('1', 7),
         ]);
-        return (*ranks.get(rank).unwrap(), *files.get(file).unwrap());
-    }
-
-    fn new() {
-    
+        return (*ranks.get(&rank).unwrap(), *files.get(&file).unwrap());
     }
 
     pub fn from_fen(fen: String) -> Board {

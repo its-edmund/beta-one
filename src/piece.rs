@@ -56,18 +56,44 @@ fn get_piece_id(piece: Piece) -> char {
     }
 }
 
+
 /*
- *fn get_legal_moves(piece: Piece, board: Board) -> Vec<Coordinate> {
+ *fn get_legal_moves(piece: Piece, board: Board, file: char, rank: char) -> Vec<Coordinate> {
  *    match piece {
  *        Piece::Pawn => pawn_legal_moves(),
  *        _ => pawn_legal_moves(board)
  *    }
  *}
- *
+ */
+
+/*
  *fn pawn_legal_moves(board: Board, file: char, rank: char) -> Vec<Coordinate> {
- *
+ *    let mut moves: Vec<Coordinate> = Vec::new();
+ *    let location = Board::convert_coordinate(rank, file);
+ *    if has_moved {
+ *        moves.push((location.0 - 1, location.1));
+ *        moves.push((location.0 - 2, location.1));
+ *        if board.board[location.0 - 1][location.1 + 1] != '_' {
+ *            moves.push((location.0 - 1, location.1 + 1))
+ *        }
+ *        if board.board[location.0 - 1][location.1 - 1] != '_' {
+ *            moves.push((location.0 - 1, location.1 - 1))
+ *        }
+ *    } else {
+ *        moves.push((location.0 - 1, location.1));
+ *    }
+ *    moves
  *}
  */
+
+/*
+ *fn rook_legal_moves(board: Board, file: char, rank: char) -> Vec<Coordinate> {
+ *    let mut moves: Vec<Coordinate> = Vec::new();
+ *    let location = Board::convert_coordinate(rank, file);
+ *    while 
+ *}
+ */
+
 
 impl Blank {
     fn possible_moves(&self, board: Board) {
