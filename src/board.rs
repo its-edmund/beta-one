@@ -64,18 +64,28 @@ impl Board {
     pub fn move_piece(&mut self, src: (char, char), dest: (char, char)) {
         let src_coord = &self.convert_coordinate(src.0, src.1);
         let dest_coord = &self.convert_coordinate(dest.0, dest.1);
-        let piece = &self.board[src_coord.0][src_coord.1].piece;
-        let mut old = std::mem::replace(
-            &mut self.board[src_coord.0][src_coord.1],
-            Square {
-                file: src.0,
-                rank: src.1,
-                piece: Piece::Blank,
-            },
-        );
-        old.file = dest.0;
-        old.rank = dest.1;
-        let new = std::mem::replace(&mut self.board[dest_coord.0][dest_coord.1], old);
+        let piece: &Piece = &self.board[src_coord.0][src_coord.1].piece;
+        // Check for legal moves
+        let _is_legal = match piece {
+            Piece::Blank => unimplemented!(),
+            Piece::King { .. }  => unimplemented!(),
+            Piece::Queen { .. } => unimplemented!(),
+            Piece::Bishop { .. } => unimplemented!(),
+            Piece::Pawn { .. } => unimplemented!(),
+            Piece::Rook { .. } => unimplemented!(),
+            Piece::Knight { .. } => unimplemented!(),
+        };
+        // let mut old = std::mem::replace(
+        //     &mut self.board[src_coord.0][src_coord.1],
+        //     Square {
+        //         file: src.0,
+        //         rank: src.1,
+        //         piece: Piece::Blank,
+        //     },
+        // );
+        // old.file = dest.0;
+        // old.rank = dest.1;
+        // let new = std::mem::replace(&mut self.board[dest_coord.0][dest_coord.1], old);
     }
 
     pub fn toggle_current_move(&mut self) {
