@@ -3,7 +3,7 @@ use std::fmt;
 
 type Coordinate = (u8, u8);
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Piece {
     King { color: Color },
     Queen { color: Color },
@@ -11,17 +11,17 @@ pub enum Piece {
     Pawn { color: Color },
     Rook { color: Color },
     Knight { color: Color },
-    Blank
+    Blank,
 }
 
 struct Player {
-    color: Color
+    color: Color,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Color {
     BLACK,
-    WHITE
+    WHITE,
 }
 
 /*
@@ -40,14 +40,12 @@ impl fmt::Display for Color {
     }
 }
 
-
-
 pub struct Pawn {
     has_moved: bool,
     location: Coordinate,
     killed: bool,
     color: Color,
-    piece_id: char
+    piece_id: char,
 }
 
 pub struct Rook;
@@ -87,15 +85,12 @@ pub struct Blank;
  *fn rook_legal_moves(board: Board, file: char, rank: char) -> Vec<Coordinate> {
  *    let mut moves: Vec<Coordinate> = Vec::new();
  *    let location = Board::convert_coordinate(rank, file);
- *    while 
+ *    while
  *}
  */
 
-
 impl Blank {
-    fn possible_moves(&self, board: Board) {
-
-    }
+    fn possible_moves(&self, board: Board) {}
 }
 
 impl Pawn {
@@ -119,4 +114,3 @@ impl Pawn {
         self.piece_id;
     }
 }
-
