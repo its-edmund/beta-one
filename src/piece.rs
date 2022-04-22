@@ -1,4 +1,5 @@
 use crate::board::Board;
+use std::fmt;
 
 type Coordinate = (u8, u8);
 
@@ -32,6 +33,14 @@ pub enum Color {
  *    pub piece_id: char
  *}
  */
+
+impl fmt::Display for Color {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+
 
 pub struct Pawn {
     has_moved: bool,
@@ -111,10 +120,3 @@ impl Pawn {
     }
 }
 
-
-impl Rook { 
-    fn possible_moves(&self, board: Board) -> Vec<Coordinate> {
-        let mut moves: Vec<Coordinate> = Vec::new();
-        moves
-    }
-}

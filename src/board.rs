@@ -13,7 +13,15 @@ pub struct Square {
 
 #[derive(Debug)]
 pub struct Board {
-    pub board: Vec<Vec<Square>>
+    pub board: Vec<Vec<Square>>,
+    pub current_move: Color,
+    pub black_can_castle_ks: bool,
+    pub black_can_castle_qs: bool,
+    pub white_can_castle_ks: bool,
+    pub white_can_castle_qs: bool,
+    pub en_passant_target: String,
+    pub halfmove_clock: i32,
+    pub fullmove_number: i32
 }
 
 
@@ -35,6 +43,24 @@ impl Board {
         }
     }
 
+
+    pub fn check_color_piece(&mut self, src: (char, char)) -> bool {
+        let src_coord = &self.convert_coordinate(src.0, src.1);
+        let piece = &self.board[src_coord.0][src_coord.1].piece;
+        let current_color = self.current_move;
+        let mut valid = false;
+        match piece {
+            Piece::Blank => valid = false,
+            _ => {
+                if matches!(&piece.color, current_color) {
+
+                }
+            }
+        }
+        matches!(&piece.color, current_color)
+    }
+
+
     pub fn move_piece(&mut self, src: (char, char), dest: (char, char)) {
         let src_coord = &self.convert_coordinate(src.0, src.1);
         let dest_coord = &self.convert_coordinate(dest.0, dest.1);
@@ -43,6 +69,10 @@ impl Board {
         old.file = dest.0;
         old.rank = dest.1;
         let new = std::mem::replace(&mut self.board[dest_coord.0][dest_coord.1], old);
+    }
+
+    pub fn toggle_current_move(&mut self) {
+        self.current_move = if matches!(self.current_move, Color::BLACK) { Color::WHITE } else { Color::BLACK }
     }
 
     fn convert_coordinate(&self, file: char, rank: char) -> (usize, usize) {
@@ -74,6 +104,16 @@ impl Board {
             
         let board_layout = fen_split[0].split("/");
 
+        let current_move = fen_split[1];
+
+        let can_castle = fen_split[2];
+        
+        let en_passant_target = fen_split[3];
+
+        let halfmove_clock = fen_split[4];
+
+        let fullmove_number = fen_split[5];
+
         let mut board: Vec<Vec<Square>> = Vec::with_capacity(8 * 8);
 
         let get_new_piece = |piece: char| {
@@ -97,16 +137,36 @@ impl Board {
         for (i, row) in board_layout.enumerate() {
             board.push(Vec::new());
             for (j, piece) in row.chars().enumerate() {
-                board[i].push(Square {
-                    rank: '1',
-                    file: 'a',
-                    piece: get_new_piece(piece)
-                });
+                if piece.is_numeric() {
+                    for k in 0..piece.to_digit(10).unwrap() {
+                        board[i].push(Square {
+                            rank: '1',
+                            file: 'a',
+                            piece: Piece::Blank
+                        });
+                    }
+                } else {
+                    board[i].push(Square {
+                        rank: '1',
+                        file: 'a',
+                        piece: get_new_piece(piece)
+                    });
+                }
             }
         }
 
 
-        Self { board }
+        Self {
+            board,
+            black_can_castle_ks: can_castle.contains('k'),
+            black_can_castle_qs: can_castle.contains('q'),
+            white_can_castle_ks: can_castle.contains('K'),
+            white_can_castle_qs: can_castle.contains('Q'),
+            en_passant_target: String::from(en_passant_target),
+            current_move: if current_move.eq("w") { Color::WHITE } else { Color::BLACK },
+            halfmove_clock: halfmove_clock.parse::<i32>().unwrap(),
+            fullmove_number: fullmove_number.parse::<i32>().unwrap(),
+        }
     }
 
     fn initialize_board(&self) {
@@ -162,6 +222,7 @@ impl fmt::Display for Board {
             }
             display_string.push('\n');
         } 
+        display_string.push_str(&format!("It\'s {}\'s move right now!\n", self.current_move));
         write!(f, "{}", display_string)
     }
 }
