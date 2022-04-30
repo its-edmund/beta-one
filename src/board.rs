@@ -281,17 +281,51 @@ fn get_piece_id(piece: &Piece) -> char {
     }
 }
 
+fn piece_id_to_icon(id: char) -> char {
+    if id == 'P' {
+        '♟'
+    } else if id == 'p' {
+        '♙'
+    } else if id == 'R' {
+        '♜'
+    } else if id == 'r' {
+        '♖'
+    } else if id == 'N' {
+        '♞'
+    } else if id == 'n' {
+        '♘'
+    } else if id == 'Q' {
+        '♛'
+    } else if id == 'q' {
+        '♕'
+    } else if id == 'K' {
+        '♚'
+    } else if id == 'k' {
+        '♔'
+    } else if id == 'B' {
+        '♝'
+    } else if id == 'b' {
+        '♗'
+    } else {
+        '_'
+    }
+}
+
 impl fmt::Display for Board {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut display_string = String::new();
+        
+        write!(f, "  a b c d e f g h \n");
+        let mut i = 8;
         for rank in &self.board {
-            for square in rank {
-                display_string.push(get_piece_id(&square.piece));
-                display_string.push(' ');
+            let mut rank_str = String::from(format!("{} ", i));
+            i -= 1;
+            for file in rank {
+                let piece = &file.piece;
+                rank_str.push(piece_id_to_icon(get_piece_id(piece)));
+                rank_str.push(' ');
             }
-            display_string.push('\n');
+            write!(f, "{}\n", rank_str);
         }
-        display_string.push_str(&format!("It\'s {}\'s move right now!\n", self.current_move));
-        write!(f, "{}", display_string)
+        Ok(())
     }
 }
